@@ -1,14 +1,23 @@
 import express from 'express'
+import morgan from 'morgan'
 
-// Configuracion
+// Config
 import { PORT } from './config.js'
+
+// Import Routes
+import userRoutes from './routes/users_routes.js'
 
 const app = express()
 
 // Middlewares
-app.use(morgan("common"))
+app.use(express.json())
+app.use(morgan('common'))
 
-app.listen(PORT, () => {
-  console.log(`El servidor esta operativo en http://localhosto:${PORT}
-  Press Ctrl-C to terminate.`)
-})
+// Routes
+app.use('/users', userRoutes)
+
+app.listen(
+  PORT,
+  () => console.log(`Server running at: http://localhost:${PORT}\n` +
+                    'Press Ctrl-C to terminate.')
+)
