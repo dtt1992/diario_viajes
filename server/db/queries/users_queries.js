@@ -25,23 +25,28 @@ async function newUser ({ email, username, password, registrationCode }) {
   try {
     connection = await getPool()
 
-    // Busco un usuario con el email que me ha entregado el usuario
+    // Comprobamos si el email está repetido.
     let user = await getUserBy({ email })
-    if (user) throw new Error('Ya existe un usuario con ese email')
 
-    // Busco el usuario con el username entregado
+    // Si el array de usuarios tiene más de 0 usuarios quiere decir que el email está repetido.
+    if (user) {
+      throw new Error('Ya existe un usuario con ese email')
+    }
+
+    // Comprobamos si el nombre de usuario está repetido.
     user = await getUserBy({ username })
-    if (user) throw new Error('Nombre de usuario no disponible')
 
-    // Hago la inserción del usuario en la db
-    const result = await connection.query(
+    // Si el array de usuarios tiene más de 0 usuarios quiere decir que el nombre de usuario está repetido.
+    if (user) {
+      throw new Error('Nombre de usuario no disponible')
+    }
+
+    // Insertamos el usuario en la base de datos.
+    const [result] = await connection.query(
       'INSERT INTO users (email, username, password, registrationCode, createdAt) VALUES(?, ?, ?, ?, ?)',
       [email, username, password, registrationCode, new Date()]
     )
-
-    const savedId = result[0].insertId
-    console.log(result)
-    return result[0]
+    return await getUserBy({ id: result.insertId })
   } catch (error) {
     console.log(error)
     return error

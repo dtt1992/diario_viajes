@@ -12,7 +12,7 @@
     "node": ">= 18.0.0"
   },
   "keywords": [],
-  "author": "Dani Torres",
+  "author": "Cristobal Dominguez <cristobald@gmail.com> (http://github.com/cristobaldominguez/)",
   "license": "UNLICENSED",
   "dependencies": {
     "bcrypt": "^5.1.0",
